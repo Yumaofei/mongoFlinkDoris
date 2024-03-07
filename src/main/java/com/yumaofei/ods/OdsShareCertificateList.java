@@ -42,7 +42,7 @@ public class OdsShareCertificateList {
 
         SingleOutputStreamOperator<String> shareCertificateList = shareCertificateListObj.map(x -> x.toString());
 
-        shareCertificateList.print();
+//        shareCertificateList.print();
 
         SingleOutputStreamOperator<RowData> rowDataSingleOutputStreamOperator = shareCertificateList.map(json -> {
                     JSONObject obj = JSONObject.parseObject(json);
@@ -61,12 +61,12 @@ public class OdsShareCertificateList {
                 }
         );
 
-        rowDataSingleOutputStreamOperator.print();
+//        rowDataSingleOutputStreamOperator.print();
 
         //doris sink option
         DorisSink.Builder<RowData> builder = DorisSink.builder();
         DorisOptions.Builder dorisBuilder = DorisOptions.builder();
-        dorisBuilder.setFenodes("1.tcp.vip.cpolar.cn:23577")
+        dorisBuilder.setFenodes("192.168.0.107:8030")
                 .setTableIdentifier("ods.ods_share_certificate_list")
                 .setUsername("test")
                 .setPassword("test");
@@ -81,7 +81,7 @@ public class OdsShareCertificateList {
                 .setStreamLoadProp(properties); //streamload params
 
         //flink rowdata‘s schema
-        String[] fields = {"dm", "mc", "jys", "jysName"};
+        String[] fields = {"id", "name", "exchange_code", "exchange_name"};
         DataType[] types = {DataTypes.INT(), DataTypes.VARCHAR(20), DataTypes.VARCHAR(5), DataTypes.VARCHAR(100)};
 
         builder.setDorisReadOptions(DorisReadOptions.builder().build())
